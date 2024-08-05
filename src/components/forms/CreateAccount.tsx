@@ -11,7 +11,6 @@ import Button from '@/components/buttons/Button';
 
 import { useUser } from '@/contexts';
 
-
 const CreateAccount = ({ passedEmail }: { passedEmail?: string }) => {
   const { setUser } = useUser();
   const router = useRouter();
@@ -21,21 +20,19 @@ const CreateAccount = ({ passedEmail }: { passedEmail?: string }) => {
   const [password, setPassword] = useState<string>('');
   const [loading, setLoading] = useState<boolean>(false);
 
-  
-
   const handleSignup = withTryCatch(
     async (e: React.FormEvent<HTMLFormElement>) => {
       e.preventDefault();
       setLoading(true);
-  
+
       const { data, error } = await supabase.auth.signUp({ email, password });
-  
+
       if (error) {
         toast.error(`Error during sign up: ${error.message}`);
         setLoading(false);
         return;
       }
-  
+
       if (data?.user) {
         // Adjust the insert query according to your table structure
         const { error: insertError } = await supabase.from(USERS_TABLE).insert([
@@ -43,14 +40,14 @@ const CreateAccount = ({ passedEmail }: { passedEmail?: string }) => {
             id: data.user.id,
           },
         ]);
-  
+
         if (insertError) {
           console.log("Data Insertion Problem: ", insertError.message);
           toast.error(`Data Insertion Problem: ${insertError.message}`);
           setLoading(false);
           return;
         }
-  
+
         if (!data.user.email_confirmed_at) {
           toast.success('Please check your email for confirmation link');
           setCheckEmail(true);
@@ -59,11 +56,11 @@ const CreateAccount = ({ passedEmail }: { passedEmail?: string }) => {
         } else {
           setUser({
             id: data.user.id,
-            email: data.user.email || null,
+            email: data.user.email || '',
             created_at: data.user.created_at,
             free_credits_used: 0,
           });
-  
+
           router.push('/dashboard');
         }
       }
