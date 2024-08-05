@@ -8,12 +8,27 @@ const nextConfig = {
   reactStrictMode: true,
 
   images: {
-    domains: [
-      'i.imgur.com',
-      'images.unsplash.com',
-      'res.cloudinary.com',
-      'arivaygfvkxrfroiglgv.supabase.co',
-      'storage.googleapis.com',
+    remotePatterns: [
+      {
+        protocol: 'https',
+        hostname: 'i.imgur.com',
+      },
+      {
+        protocol: 'https',
+        hostname: 'images.unsplash.com',
+      },
+      {
+        protocol: 'https',
+        hostname: 'res.cloudinary.com',
+      },
+      {
+        protocol: 'https',
+        hostname: 'arivaygfvkxrfroiglgv.supabase.co',
+      },
+      {
+        protocol: 'https',
+        hostname: 'storage.googleapis.com',
+      },
     ],
   },
 

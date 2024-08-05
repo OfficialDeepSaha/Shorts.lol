@@ -2282,6 +2282,13 @@
   resolved "https://registry.npmjs.org/@types/stack-utils/-/stack-utils-2.0.1.tgz"
   integrity sha512-Hl219/BT5fLAaz6NDkSuhzasy49dwQS/DSdu4MdggFB8zcXv7vflBI3xp7FEmkmdDkBUI2bPUNeMttp2knYdxw==
 
+"@types/tailwindcss@^3.1.0":
+  version "3.1.0"
+  resolved "https://registry.npmjs.org/@types/tailwindcss/-/tailwindcss-3.1.0.tgz"
+  integrity sha512-JxPzrm609hzvF4nmOI3StLjbBEP3WWQxDDJESqR1nh94h7gyyy3XSl0hn5RBMJ9mPudlLjtaXs5YEBtLw7CnPA==
+  dependencies:
+    tailwindcss "*"
+
 "@types/testing-library__jest-dom@^5.9.1":
   version "5.14.9"
   resolved "https://registry.npmjs.org/@types/testing-library__jest-dom/-/testing-library__jest-dom-5.14.9.tgz"
@@ -2874,16 +2881,16 @@ asynckit@^0.4.0:
   resolved "https://registry.npmjs.org/asynckit/-/asynckit-0.4.0.tgz"
   integrity sha512-Oei9OH4tRh0YqU3GxhX79dM/mwVgvbZJaSNaRk+bshkj0S5cfHcgYakreBjrHwatXKbz+IoIdYLxrKim2MjW0Q==
 
-autoprefixer@^10.4.19:
-  version "10.4.19"
-  resolved "https://registry.npmjs.org/autoprefixer/-/autoprefixer-10.4.19.tgz"
-  integrity sha512-BaENR2+zBZ8xXhM4pUaKUxlVdxZ0EZhjvbopwnXmxRUfqDmwSpC2lAi/QXvx7NRdPCo1WKEcEF6mV64si1z4Ew==
+autoprefixer@^10.4.20:
+  version "10.4.20"
+  resolved "https://registry.npmjs.org/autoprefixer/-/autoprefixer-10.4.20.tgz"
+  integrity sha512-XY25y5xSv/wEoqzDyXXME4AFfkZI0P23z6Fs3YgymDnKJkCGOnkL0iTxCa85UTqaSgfcqyf3UA6+c7wUvx/16g==
   dependencies:
-    browserslist "^4.23.0"
-    caniuse-lite "^1.0.30001599"
+    browserslist "^4.23.3"
+    caniuse-lite "^1.0.30001646"
     fraction.js "^4.3.7"
     normalize-range "^0.1.2"
-    picocolors "^1.0.0"
+    picocolors "^1.0.1"
     postcss-value-parser "^4.2.0"
 
 available-typed-arrays@^1.0.5:
@@ -3088,14 +3095,14 @@ browser-process-hrtime@^1.0.0:
   resolved "https://registry.npmjs.org/browser-process-hrtime/-/browser-process-hrtime-1.0.0.tgz"
   integrity sha512-9o5UecI3GhkpM6DrXr69PblIuWxPKk9Y0jHBRhdocZ2y7YECBFCsHm79Pr3OyR2AvjhDkabFJaDJMYRazHgsow==
 
-browserslist@^4.21.10, browserslist@^4.21.9, browserslist@^4.23.0, "browserslist@>= 4.21.0":
-  version "4.23.2"
-  resolved "https://registry.npmjs.org/browserslist/-/browserslist-4.23.2.tgz"
-  integrity sha512-qkqSyistMYdxAcw+CzbZwlBy8AGmS/eEWs+sEV5TnLRGDOL+C5M2EnH6tlZyg0YoAxGJAFKh61En9BR941GnHA==
+browserslist@^4.21.10, browserslist@^4.21.9, browserslist@^4.23.3, "browserslist@>= 4.21.0":
+  version "4.23.3"
+  resolved "https://registry.npmjs.org/browserslist/-/browserslist-4.23.3.tgz"
+  integrity sha512-btwCFJVjI4YWDNfau8RhZ+B1Q/VLoUITrm3RlP6y1tYGWIOa+InuYiRGXUBXo8nA1qKmHMyLB/iVQg5TT4eFoA==
   dependencies:
-    caniuse-lite "^1.0.30001640"
-    electron-to-chromium "^1.4.820"
-    node-releases "^2.0.14"
+    caniuse-lite "^1.0.30001646"
+    electron-to-chromium "^1.5.4"
+    node-releases "^2.0.18"
     update-browserslist-db "^1.1.0"
 
 bser@2.1.1:
@@ -3178,10 +3185,10 @@ camelcase@^6.2.0:
   resolved "https://registry.npmjs.org/camelcase/-/camelcase-6.3.0.tgz"
   integrity sha512-Gmy6FhYlCY7uOElZUSbxo2UCDH8owEk996gkbrpsgGtrJLM3J7jGxl9Ic7Qwwj4ivOE5AWZWRMecDdF7hqGjFA==
 
-caniuse-lite@^1.0.30001579, caniuse-lite@^1.0.30001599, caniuse-lite@^1.0.30001640:
-  version "1.0.30001643"
-  resolved "https://registry.npmjs.org/caniuse-lite/-/caniuse-lite-1.0.30001643.tgz"
-  integrity sha512-ERgWGNleEilSrHM6iUz/zJNSQTP8Mr21wDWpdgvRwcTXGAq6jMtOUPP4dqFPTdKqZ2wKTdtB+uucZ3MRpAUSmg==
+caniuse-lite@^1.0.30001579, caniuse-lite@^1.0.30001646:
+  version "1.0.30001649"
+  resolved "https://registry.npmjs.org/caniuse-lite/-/caniuse-lite-1.0.30001649.tgz"
+  integrity sha512-fJegqZZ0ZX8HOWr6rcafGr72+xcgJKI9oWfDW5DrD7ExUtgZC7a7R7ZYmZqplh7XDocFdGeIFn7roAxhOeYrPQ==
 
 chalk@^2.4.2:
   version "2.4.2"
@@ -3911,10 +3918,10 @@ edge-runtime@2.4.4:
     signal-exit "4.0.2"
     time-span "4.0.0"
 
-electron-to-chromium@^1.4.820:
-  version "1.5.2"
-  resolved "https://registry.npmjs.org/electron-to-chromium/-/electron-to-chromium-1.5.2.tgz"
-  integrity sha512-kc4r3U3V3WLaaZqThjYz/Y6z8tJe+7K0bbjUVo3i+LWIypVdMx5nXCkwRe6SWbY6ILqLdc1rKcKmr3HoH7wjSQ==
+electron-to-chromium@^1.5.4:
+  version "1.5.4"
+  resolved "https://registry.npmjs.org/electron-to-chromium/-/electron-to-chromium-1.5.4.tgz"
+  integrity sha512-orzA81VqLyIGUEA77YkVA1D+N+nNfl2isJVjjmOyrlxuooZ19ynb+dOlaDTqd/idKRS9lDCSBmtzM+kyCsMnkA==
 
 elevenlabs@^0.13.0:
   version "0.13.0"
@@ -6773,7 +6780,7 @@ node-int64@^0.4.0:
   resolved "https://registry.npmjs.org/node-int64/-/node-int64-0.4.0.tgz"
   integrity sha512-O5lz91xSOeoXP6DulyHfllpq+Eg00MWitZIbtPfoSEvqIHdl5gfcY6hYzDWnj0qD5tz52PI08u9qUvSVeUBeHw==
 
-node-releases@^2.0.14:
+node-releases@^2.0.18:
   version "2.0.18"
   resolved "https://registry.npmjs.org/node-releases/-/node-releases-2.0.18.tgz"
   integrity sha512-d9VeXT4SJ7ZeOqGX6R5EM022wpL+eWPooLI+5UpWn2jCT1aosUQEhQP214x33Wkwx3JQMvIm+tIoVOdodFS40g==
@@ -8318,7 +8325,7 @@ tailwind-merge@^1.12.0:
   resolved "https://registry.npmjs.org/tailwind-merge/-/tailwind-merge-1.14.0.tgz"
   integrity sha512-3mFKyCo/MBcgyOTlrY8T7odzZFx+w+qKSMAmdFzRvqBfLlSigU6TZnlFHK0lkMwj9Bj8OYU+9yW9lmGuS0QEnQ==
 
-"tailwindcss@>=3.0.0 || >= 3.0.0-alpha.1":
+tailwindcss@*, tailwindcss@^3.4.7, "tailwindcss@>=3.0.0 || >= 3.0.0-alpha.1":
   version "3.4.7"
   resolved "https://registry.npmjs.org/tailwindcss/-/tailwindcss-3.4.7.tgz"
   integrity sha512-rxWZbe87YJb4OcSopb7up2Ba4U82BoiSGUdoDr3Ydrg9ckxFS/YWsvhN323GMcddgU65QRy7JndC7ahhInhvlQ==
