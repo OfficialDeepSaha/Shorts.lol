@@ -208,10 +208,10 @@ const generateThumbnail = async (data: CreateFormType) : Promise<string | undefi
   
       return url;
     } catch (error) {
-      if (error.response) {
-        console.error('Error response:', JSON.stringify(error.response.data, null, 2));
+      if (error) {
+        console.error('Error response:', JSON.stringify(error, null, 2));
       } else {
-        console.error('Error message:', error.message);
+        console.error('Error message:', error);
       }
       return undefined;
     }
