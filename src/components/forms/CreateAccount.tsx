@@ -59,6 +59,7 @@ const CreateAccount = ({ passedEmail }: { passedEmail?: string }) => {
             email: data.user.email || '',
             created_at: data.user.created_at,
             free_credits_used: 0,
+            subscription: null, // Set a default value for the subscription property
           });
 
           router.push('/dashboard');
