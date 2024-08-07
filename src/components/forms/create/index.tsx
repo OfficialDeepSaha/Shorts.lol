@@ -2,9 +2,7 @@ import { yupResolver } from '@hookform/resolvers/yup';
 import { useState } from 'react';
 import { FormProvider, useForm } from 'react-hook-form';
 import toast from 'react-hot-toast';
-
 import { RainbowBorderButton } from '@/components/buttons/RainbowBorderButton';
-
 import {
   CreateFormType,
   stepOneSchema,
@@ -31,7 +29,6 @@ import axios from 'axios';
 const CreateForm: React.FC = () => {
   const router = useRouter();
   const { user } = useUser();
-
   const [step, setStep] = useState(0);
 
   const methods = useForm<CreateFormType>({
@@ -40,18 +37,14 @@ const CreateForm: React.FC = () => {
 
   const { register, handleSubmit } = methods;
 
-  const [selectedVoice, setSelectedVoice] = useState(
-    AI_VOICE_SELECT_OPTIONS[0]
-  );
+  const [selectedVoice, setSelectedVoice] = useState(AI_VOICE_SELECT_OPTIONS[0]);
   const [isSubtitles, setIsSubtitles] = useState(false);
-
   const [loading, setLoading] = useState(false);
 
   const handleNext = async (data: CreateFormType) => {
     try {
       setLoading(true);
       await validationSchema[step].validate(data);
-
       setStep((prevStep) => prevStep + 1);
     } catch (error: any) {
       console.error(error);
@@ -86,115 +79,105 @@ const CreateForm: React.FC = () => {
     },
   ];
 
+  const generateThumbnail = async (data: CreateFormType): Promise<string | undefined> => {
+    const options = {
+      method: 'POST',
+      url: 'https://ai-text-to-image-generator-api.p.rapidapi.com/realistic',
+      headers: {
+        'x-rapidapi-key': '76bc71515bmshbeb718a74ca628bp1a912djsnade9d7880480',
+        'x-rapidapi-host': 'ai-text-to-image-generator-api.p.rapidapi.com',
+        'Content-Type': 'application/json'
+      },
+      data: {
+        inputs: data.prompt
+      }
+    };
 
+    let attempts = 0;
+    const maxAttempts = 5;
+    toast.success('Generating Images...');
 
-const generateThumbnail = async (data: CreateFormType) : Promise<string | undefined> => {
-  const options = {
-    method: 'POST',
-    url: 'https://ai-text-to-image-generator-api.p.rapidapi.com/3D',
-    headers: {
-      'x-rapidapi-key': '76bc71515bmshbeb718a74ca628bp1a912djsnade9d7880480',
-      'x-rapidapi-host': 'ai-text-to-image-generator-api.p.rapidapi.com',
-      'Content-Type': 'application/json'
-    },
-    data: {
-      inputs: data.prompt
+    while (attempts < maxAttempts) {
+      try {
+        const res = await axios.request(options);
+        console.log('Response from Text2Image Video API:', res.data);
+        const imageURL = res.data.url;
+        if (!imageURL) {
+          throw new Error('Failed to retrieve video URL');
+        }
+        return imageURL;
+      } catch (error: any) {
+        if (error.response && error.response.status === 429) {
+          attempts++;
+          console.log(`Rate limit exceeded, retrying in ${attempts * 2} seconds...`);
+          await new Promise(resolve => setTimeout(resolve, attempts * 2000));
+        } else {
+          throw error;
+        }
+      }
     }
+
+    throw new Error('Failed to generate thumbnail after multiple attempts');
   };
-  
-  
-    const res = await axios.request(options);
-    console.log('Response from Text2Image Video API:',res.data);
 
-    const imageURL = res.data.url;
-
-    if (!imageURL) {
-      throw new Error('Failed to retrieve video URL');
-    }
-
-    return imageURL;
-
-
-
-}
-
+ 
 
 
 
 
   const generateVideo = async (data: CreateFormType): Promise<string | undefined> => {
-    const helloWorldJson = {
-      timeline: {
-        soundtrack: {
-          src: "https://s3-ap-southeast-2.amazonaws.com/shotstack-assets/music/moment.mp3",
-          effect: "fadeOut"
-        },
-        background: "#000000",
-        tracks: [
-          {
-            clips: [
-              {
-                asset: {
-                  type: "text",
-                  text: data.prompt,
-                },
-                start: 0,
-                length: 30,
-                transition: {
-                  in: "fade",
-                  out: "fade"
-                }
-              }
-            ]
-          }
-        ]
-      },
-      output: {
-        format: "mp4",
-        size: {
-          width: 1024,
-          height: 576
-        }
-      }
-    };
-  
     try {
-      console.log('Sending request to Shotstack API:', JSON.stringify(helloWorldJson, null, 2));
-
-
-
-  
-      const response = await axios.post('https://api.shotstack.io/edit/stage/render', helloWorldJson, {
-        headers: {
-          'Content-Type': 'application/json',
-          'x-api-key': 'pHGJlGjBmcTlNyK0lFbyfYJ2auw90uZJQyY3CvZS'
+      console.log('Sending request to RunwayML API:');
+      toast.success('Generating Video...')
+      const response = await axios.post(
+        'https://runwayml.p.rapidapi.com/generate/text',
+        {
+          text_prompt: data.prompt,
+          model: 'gen3',
+          width: 1344,
+          height: 768,
+          motion: 30,
+          seed: 0,
+          upscale: true,
+          interpolate: true,
+          callback_url: ''
+        },
+        {
+          headers: {
+            'x-rapidapi-key': '3d2d391436msh372e7b3970cb154p151b9cjsn2aff94a09828',
+            'x-rapidapi-host': 'runwayml.p.rapidapi.com',
+            'Content-Type': 'application/json'
+          }
         }
-      });
+      );
   
-      console.log('Response from Shotstack Video API:', response.data);
+      console.log('Response from RunwayML Video API:', response.data);
   
-      if (!response.data || !response.data.response || !response.data.response.id) {
-        throw new Error('Invalid response from Shotstack API');
+      if (!response.data || !response.data.uuid) {
+        throw new Error('Invalid response from RunwayML API');
       }
   
-      const renderId = response.data.response.id;
+      const renderId = response.data.uuid;
       let status = 'queued';
       let url;
   
-      while (status !== 'done' && status !== 'failed') {
-        const statusResponse = await axios.get(`https://api.shotstack.io/edit/stage/render/${renderId}`, {
+      while (status !== 'success' && status !== 'failed') {
+        const statusResponse = await axios.get(`https://runwayml.p.rapidapi.com/status`, {
+          params: {
+            uuid: renderId
+          },
           headers: {
-            'Content-Type': 'application/json',
-            'x-api-key': 'pHGJlGjBmcTlNyK0lFbyfYJ2auw90uZJQyY3CvZS'
+            'x-rapidapi-key': '76bc71515bmshbeb718a74ca628bp1a912djsnade9d7880480',
+            'x-rapidapi-host': 'runwayml.p.rapidapi.com'
           }
         });
   
         console.log('Polling response:', statusResponse.data);
   
-        status = statusResponse.data.response.status;
+        status = statusResponse.data.status;
   
-        if (status === 'done') {
-          url = statusResponse.data.response.url;
+        if (status === 'success') {
+          url = statusResponse.data.url;
         } else if (status === 'failed') {
           throw new Error('Video rendering failed');
         } else {
@@ -207,49 +190,43 @@ const generateThumbnail = async (data: CreateFormType) : Promise<string | undefi
       }
   
       return url;
-    } catch (error) {
-      if (error) {
-        console.error('Error response:', JSON.stringify(error, null, 2));
-      } else {
-        console.error('Error message:', error);
-      }
+    } catch (error: any) {
+      console.error('Error response:', JSON.stringify(error, null, 2));
       return undefined;
     }
   };
   
+
+
+
   const handleSubmitAsync = async (data: CreateFormType) => {
     if (step !== steps.length - 1) {
       await handleNext(data);
       return;
     }
     setLoading(true);
-  
+
     try {
       if (!user?.id) {
         throw new Error('User not found');
       }
-  
+
       if (UserService.hasUserReachedTokenLimit(user)) {
         toast.error(
-          `You have reached your monthly token limit of ${UserService.getUserTokenLimit(
-            user
-          )}. Please upgrade your plan`
+          `You have reached your monthly token limit of ${UserService.getUserTokenLimit(user)}. Please upgrade your plan`
         );
-  
         router.push('/pricing');
-  
         setLoading(false);
-  
         return;
       }
-  
+
       const videoURL = await generateVideo(data);
-      const imageURL = await generateThumbnail(data)
-  
+      const imageURL = await generateThumbnail(data);
+
       if (!videoURL) {
         throw new Error('Failed to generate video URL');
       }
-  
+
       const video_id = await addNewVideo({
         userID: user.id,
         prompt: data.prompt,
@@ -258,15 +235,14 @@ const generateThumbnail = async (data: CreateFormType) : Promise<string | undefi
         isScript: data.isScript,
         script: data.script,
         url: videoURL,
-        thumbnail_url : imageURL
+        thumbnail_url: imageURL
       });
-  
+
       await axios.post('/api/queueOrder', {
         video_id,
       });
-  
+
       toast.success('Video created!');
-  
       router.push('/dashboard');
     } catch (error: any) {
       toast.error(error.message);
@@ -275,14 +251,12 @@ const generateThumbnail = async (data: CreateFormType) : Promise<string | undefi
       return;
     }
   };
-  
-  
 
   return (
     <FormProvider {...methods}>
       <form onSubmit={handleSubmit(handleSubmitAsync)}>
         <div className='mx-auto w-full max-w-7xl px-2 sm:px-6 lg:px-8'>
-          <div className='mb-4 flex w-full items-center  justify-between'>
+          <div className='mb-4 flex w-full items-center justify-between'>
             <BiArrowBack
               className='h-6 w-6 cursor-pointer text-gray-600 hover:text-black'
               onClick={() => {

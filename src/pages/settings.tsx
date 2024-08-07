@@ -1,9 +1,9 @@
 import { ArrowLeftIcon } from '@heroicons/react/outline';
 import { PaymentType, TOKEN_LIMITS } from '@/constants';
 import { format, parseISO } from 'date-fns';
-import { useCallback, useEffect, useState } from 'react';
+import { use, useCallback, useEffect, useState } from 'react';
 
-import { getTokensUsed } from '@/lib/supabase/tokens/getTokensUsed';
+import { getFreeTokensUsed } from '@/lib/supabase/tokens/getFreeTokensUsed';
 
 import StyledInput, { StyledInputTailwind } from '@/components/forms/input';
 import DashboardHeader, {
@@ -17,11 +17,11 @@ import withAuth from '@/hoc/withAuth';
 const Settings = () => {
   const { user } = useUser();
 
-  const [tokensUsed, setTokensUsed] = useState(-1);
+  const [tokensUsed, setTokensUsed] = useState(0);
 
   const fetchTokensUsed = useCallback(async () => {
     if (user?.id) {
-      const tokens = await getTokensUsed(user.id);
+      const tokens = await getFreeTokensUsed(user.id);
 
       setTokensUsed(tokens);
     }
@@ -59,9 +59,9 @@ const Settings = () => {
                   disabled
                   className={StyledInputTailwind}
                   value={
-                    tokensUsed < 0
+                    tokensUsed < -1
                       ? 'Loading...'
-                      : `${tokensUsed} / ${
+                      : `${user?.free_credits_used} / ${
                           TOKEN_LIMITS[
                             (user?.subscription?.tier as PaymentType) ||
                               PaymentType.FREE
