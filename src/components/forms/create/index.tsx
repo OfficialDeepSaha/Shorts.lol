@@ -84,7 +84,7 @@ const CreateForm: React.FC = () => {
       method: 'POST',
       url: 'https://ai-text-to-image-generator-api.p.rapidapi.com/realistic',
       headers: {
-        'x-rapidapi-key': '76bc71515bmshbeb718a74ca628bp1a912djsnade9d7880480',
+        'x-rapidapi-key': '13d2eef55emsh741d7a98a7b20c1p12d373jsn347d060277ea',
         'x-rapidapi-host': 'ai-text-to-image-generator-api.p.rapidapi.com',
         'Content-Type': 'application/json'
       },
@@ -144,7 +144,7 @@ const CreateForm: React.FC = () => {
         },
         {
           headers: {
-            'x-rapidapi-key': '3d2d391436msh372e7b3970cb154p151b9cjsn2aff94a09828',
+            'x-rapidapi-key': '13d2eef55emsh741d7a98a7b20c1p12d373jsn347d060277ea',
             'x-rapidapi-host': 'runwayml.p.rapidapi.com',
             'Content-Type': 'application/json'
           }
