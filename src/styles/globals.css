@@ -142,13 +142,14 @@ body.no-scroll {
 }
 
 @keyframes colorPulse {
-  0%,
-  100% {
-    color: #6366f1; /* Color for text-indigo-600 */
-    fill: #6366f1; /* This is for the SVG */
+  0%, 100% {
+    color: #6366f1; /* Start and end with text-indigo-600 */
   }
   50% {
-    color: #ec4899; /* Lighter color shade */
-    fill: #ec4899; /* This is for the SVG */
+    color: #ec4899; /* Midway change to pink */
   }
+}
+
+.animate-colorPulse {
+  animation: colorPulse 9s infinite; /* Adjust timing as needed */
 }
