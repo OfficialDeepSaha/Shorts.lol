@@ -84,7 +84,7 @@ const CreateForm: React.FC = () => {
       method: 'POST',
       url: 'https://ai-text-to-image-generator-api.p.rapidapi.com/realistic',
       headers: {
-        'x-rapidapi-key': 'f79c912f9fmshb6d5d74414acbc0p11881ajsn9cabd25cc334',
+        'x-rapidapi-key': '7f7a9c5f19msh0fd8d57972b1418p147d93jsn5a3f7fc865cd',
         'x-rapidapi-host': 'ai-text-to-image-generator-api.p.rapidapi.com',
         'Content-Type': 'application/json'
       },
@@ -144,7 +144,7 @@ const CreateForm: React.FC = () => {
         },
         {
           headers: {
-            'x-rapidapi-key': 'f79c912f9fmshb6d5d74414acbc0p11881ajsn9cabd25cc334',
+            'x-rapidapi-key': '7f7a9c5f19msh0fd8d57972b1418p147d93jsn5a3f7fc865cd',
             'x-rapidapi-host': 'runwayml.p.rapidapi.com',
             'Content-Type': 'application/json'
           }
@@ -167,7 +167,7 @@ const CreateForm: React.FC = () => {
             uuid: renderId
           },
           headers: {
-            'x-rapidapi-key': 'f79c912f9fmshb6d5d74414acbc0p11881ajsn9cabd25cc334',
+            'x-rapidapi-key': '7f7a9c5f19msh0fd8d57972b1418p147d93jsn5a3f7fc865cd',
             'x-rapidapi-host': 'runwayml.p.rapidapi.com'
           }
         });
