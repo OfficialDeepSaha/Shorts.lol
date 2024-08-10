@@ -10,13 +10,9 @@
       ]
     }
   ],
-  "rewrites": [
+ "rewrites": [
     {
-      "source": "/",
-      "destination": "/index.html"
-    },
-    {
-      "source": "/index",
+      "source": "/index.html",
       "destination": "/index.html"
     }
   ]
