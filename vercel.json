@@ -10,10 +10,14 @@
       ]
     }
   ],
- "rewrites": [
+  "rewrites": [
     {
       "source": "/",
-      "destination": "public/index.html"
+      "destination": "/index.html"
+    },
+    {
+      "source": "/index",
+      "destination": "/index.html"
     }
   ]
 }
