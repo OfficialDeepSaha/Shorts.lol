@@ -79,138 +79,18 @@ const CreateForm: React.FC = () => {
     },
   ];
 
-  const generateThumbnail = async (data: CreateFormType): Promise<string | undefined> => {
-    const options = {
-      method: 'POST',
-      url: 'https://ai-text-to-image-generator-api.p.rapidapi.com/realistic',
-      headers: {
-        'x-rapidapi-key': '7f7a9c5f19msh0fd8d57972b1418p147d93jsn5a3f7fc865cd',
-        'x-rapidapi-host': 'ai-text-to-image-generator-api.p.rapidapi.com',
-        'Content-Type': 'application/json'
-      },
-      data: {
-        inputs: data.prompt
-      }
-    };
-
-    let attempts = 0;
-    const maxAttempts = 5;
-    toast.success('Generating Images...');
-
-    while (attempts < maxAttempts) {
-      try {
-        const res = await axios.request(options);
-        console.log('Response from Text2Image Video API:', res.data);
-        const imageURL = res.data.url;
-        if (!imageURL) {
-          throw new Error('Failed to retrieve video URL');
-        }
-        return imageURL;
-      } catch (error: any) {
-        if (error.response && error.response.status === 429) {
-          attempts++;
-          console.log(`Rate limit exceeded, retrying in ${attempts * 2} seconds...`);
-          await new Promise(resolve => setTimeout(resolve, attempts * 2000));
-        } else {
-          throw error;
-        }
-      }
-    }
-
-    throw new Error('Failed to generate thumbnail after multiple attempts');
-  };
-
- 
-
-
-
-
-  const generateVideo = async (data: CreateFormType): Promise<string | undefined> => {
-    try {
-      console.log('Sending request to RunwayML API:');
-      toast.success('Generating Video...')
-      const response = await axios.post(
-        'https://runwayml.p.rapidapi.com/generate/text',
-        {
-          text_prompt: data.prompt,
-          model: 'gen3',
-          width: 1344,
-          height: 768,
-          motion: 30,
-          seed: 0,
-          upscale: true,
-          interpolate: true,
-          callback_url: ''
-        },
-        {
-          headers: {
-            'x-rapidapi-key': '7f7a9c5f19msh0fd8d57972b1418p147d93jsn5a3f7fc865cd',
-            'x-rapidapi-host': 'runwayml.p.rapidapi.com',
-            'Content-Type': 'application/json'
-          }
-        }
-      );
-  
-      console.log('Response from RunwayML Video API:', response.data);
-  
-      if (!response.data || !response.data.uuid) {
-        throw new Error('Invalid response from RunwayML API');
-      }
-  
-      const renderId = response.data.uuid;
-      let status = 'queued';
-      let url;
-  
-      while (status !== 'success' && status !== 'failed') {
-        const statusResponse = await axios.get(`https://runwayml.p.rapidapi.com/status`, {
-          params: {
-            uuid: renderId
-          },
-          headers: {
-            'x-rapidapi-key': '7f7a9c5f19msh0fd8d57972b1418p147d93jsn5a3f7fc865cd',
-            'x-rapidapi-host': 'runwayml.p.rapidapi.com'
-          }
-        });
-  
-        console.log('Polling response:', statusResponse.data);
-  
-        status = statusResponse.data.status;
-  
-        if (status === 'success') {
-          url = statusResponse.data.url;
-        } else if (status === 'failed') {
-          throw new Error('Video rendering failed');
-        } else {
-          await new Promise(resolve => setTimeout(resolve, 5000));
-        }
-      }
-  
-      if (!url) {
-        throw new Error('Failed to retrieve video URL');
-      }
-  
-      return url;
-    } catch (error: any) {
-      console.error('Error response:', JSON.stringify(error, null, 2));
-      return undefined;
-    }
-  };
-  
-
-
-
   const handleSubmitAsync = async (data: CreateFormType) => {
     if (step !== steps.length - 1) {
       await handleNext(data);
       return;
     }
     setLoading(true);
-
+  
     try {
       if (!user?.id) {
         throw new Error('User not found');
       }
-
+  
       if (UserService.hasUserReachedTokenLimit(user)) {
         toast.error(
           `You have reached your monthly token limit of ${UserService.getUserTokenLimit(user)}. Please upgrade your plan`
@@ -219,14 +99,18 @@ const CreateForm: React.FC = () => {
         setLoading(false);
         return;
       }
-
-      const videoURL = await generateVideo(data);
-      const imageURL = await generateThumbnail(data);
-
-      if (!videoURL) {
+  
+      // Send the prompt to the Flask API
+      const response = await axios.post('http://localhost:5000/generate_video', {
+        topic: data.prompt,
+      });
+  
+      const { video_url } = response.data;
+  
+      if (!video_url) {
         throw new Error('Failed to generate video URL');
       }
-
+  
       const video_id = await addNewVideo({
         userID: user.id,
         prompt: data.prompt,
@@ -234,23 +118,23 @@ const CreateForm: React.FC = () => {
         endingText: data.endingText,
         isScript: data.isScript,
         script: data.script,
-        url: videoURL,
-        thumbnail_url: imageURL
+        url: video_url,
       });
-
+  
       await axios.post('/api/queueOrder', {
         video_id,
       });
-
+  
       toast.success('Video created!');
       router.push('/dashboard');
     } catch (error: any) {
       toast.error(error.message);
       toast.error('Please contact team@shorts.lol');
+    } finally {
       setLoading(false);
-      return;
     }
   };
+  
 
   return (
     <FormProvider {...methods}>
